@@ -1,0 +1,1218 @@
+﻿<UserControl x:Class="Vision.JPViewCtrl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:local="clr-namespace:Vision"
+             mc:Ignorable="d" 
+             Loaded="UserControl_Loaded"
+             d:DesignHeight="400" d:DesignWidth="320">
+    <UserControl.Resources>
+        <local:CACG_Conv x:Key="CACG_Conv"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid>
+                <Border Grid.Column="0" Margin="3" BorderBrush="Black" BorderThickness="0.5">
+                    <Grid ClipToBounds="True">
+                        <Image x:Name="Imc_PlayerForCamera" 
+                                   Panel.ZIndex="0"       
+                                   ClipToBounds="True"
+                                   MouseLeftButtonDown="Imc_Player_MouseLeftButtonDown"
+                                   MouseLeftButtonUp="Imc_Player_MouseLeftButtonUp"
+                                   MouseMove="Imc_Player_MouseMove"
+                                   MouseWheel="Imc_Player_MouseWheel"
+                                   Stretch="Uniform"
+                                   Source="{Binding ImSrc_test2 , Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <TranslateTransform/>
+                                    <ScaleTransform />
+                                    <RotateTransform />
+                                </TransformGroup>
+                            </Image.RenderTransform>
+
+                        </Image>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid>
+                <Border Grid.Column="0" Margin="3" BorderBrush="Black" BorderThickness="0.5">
+                    <Grid ClipToBounds="True">
+                        <TabControl SelectedIndex="{Binding selectedIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+
+                            <TabItem Header="显示">
+                                <ScrollViewer>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions >
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Grid.Column="0" Margin="3" BorderBrush="Black" BorderThickness="0.5">
+                                            <Grid ClipToBounds="True">
+
+                                                <Grid.RowDefinitions >
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                </Grid.RowDefinitions>
+
+                                                <Grid  Grid.Row="0" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Button Grid.Column="0" x:Name="AutoStart" Content="{Binding ButtonStr,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                        Command="{Binding CamCommand}" HorizontalAlignment="Left" Visibility="Hidden"/>
+
+                                                    <Button Grid.Column="1"  Content="{Binding ButtonStr,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="1" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="运行模式" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    <ComboBox Grid.Column="1"
+                                                  IsEnabled="{Binding isConnect}"
+                                                  SelectedIndex="{Binding SamplingMode,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                                                        <ComboBoxItem Content="自动模式" />
+                                                        <ComboBoxItem Content="手动模式" />
+                                                    </ComboBox>
+                                                </Grid>
+
+                                                <Grid  Grid.Row="2" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Button Grid.Column="1" Content="触发测试" HorizontalAlignment="Left" 
+                                                        IsEnabled="{Binding isConnect}"
+                                                        Command="{Binding TriggerCommand}">
+                                                        <Button.Visibility>
+                                                            <MultiBinding Converter="{StaticResource CACG_Conv}">
+                                                                <Binding Path="SamplingMode" />
+                                                                <Binding Path="CommboxID[0]" />
+                                                            </MultiBinding>
+                                                        </Button.Visibility>
+                                                    </Button>
+                                                </Grid>
+
+                                                <Grid Grid.Row="3" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="显示方式" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    <ComboBox Grid.Column="1"
+                                            SelectedIndex="{Binding ShowMode,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                                                        <ComboBoxItem Content="原始图像" />
+                                                        <ComboBoxItem Content="定位灰度" />
+                                                    </ComboBox>
+                                                </Grid>
+
+                                                <Grid Grid.Row="4" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                                    Grid.Column="0"
+                                                    VerticalAlignment="Center"
+                                                    Text="镜片角度" />
+                                                    <hc:NumericUpDown
+                                                    Grid.Column="1"
+                                                    IsReadOnly="True"
+                                                    Minimum="0"
+                                                    ValueFormat="#0.000"
+                                                    Value="{Binding AngJP, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid  Grid.Row="5" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="X偏移2" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    <hc:NumericUpDown Grid.Column="1" IsReadOnly="True"
+                                                                  Minimum="-999" 
+                                                                  ValueFormat="#0.000"
+                                                                  Value="{Binding Xdeviation2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                                </Grid>
+
+                                                <Grid  Grid.Row="6" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="Y偏移2" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    <hc:NumericUpDown Grid.Column="1" IsReadOnly="True"
+                                                                  Minimum="-999" 
+                                                                  ValueFormat="#0.000"
+                                                                  Value="{Binding Ydeviation2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                                </Grid>
+
+                                                <Grid  Grid.Row="7" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="2*"/>
+                                                        <ColumnDefinition Width="2*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Grid Grid.Column="0" Margin="3">
+                                                        <TextBlock Text="发送数据↓" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    </Grid>
+
+                                                    <Grid Grid.Column="1" Margin="3">
+                                                        <Button Content="设置" Command="{Binding SetCommand}"/>
+                                                    </Grid>
+
+                                                    <Grid Grid.Column="2" Margin="3">
+                                                        <Button Content="退出" Command="{Binding ExitCommand}"/>
+                                                    </Grid>
+                                                </Grid>
+
+                                                <Grid  Grid.Row="8" Margin="3">
+                                                    <TextBlock  Foreground="{Binding DetecColor2}" TextWrapping="Wrap">
+                                                       <Run Text="{Binding resultCalculation}"/>
+                                                    </TextBlock>
+                                                </Grid>
+
+                                            </Grid>
+                                        </Border>
+
+                                        <Grid  Grid.Column="1" Margin="3">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="2*"/>
+                                            </Grid.RowDefinitions>
+
+                                            <Viewbox Grid.Row="0" Margin="3" HorizontalAlignment="Center">
+                                                <TextBlock Foreground="{Binding DetecColor2}">
+                                               <Run Text="{Binding DetecResult2}"/>
+                                                </TextBlock>
+                                            </Viewbox>
+                                        </Grid>
+
+                                    </Grid>
+                                </ScrollViewer>
+                            </TabItem>
+
+                            <TabItem Header="定位" IsEnabled="{Binding isEnabled,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                <ScrollViewer>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions >
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Grid.Column="0" Margin="3" BorderBrush="Black" BorderThickness="0.5">
+                                            <Grid ClipToBounds="True">
+
+                                                <Grid.RowDefinitions >
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0" Margin="3">
+                                                    <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="Blue"
+                                            Text="JP定位参数设置" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="1" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="定位X2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding DefultX2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="2" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="定位Y2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding DefultY2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="3" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="内界限2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding MinRadius2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="4" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="外界限2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding MaxRadius2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="5" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="扫描方向2" />
+                                                    <ComboBox Grid.Column="1" SelectedIndex="{Binding ScanDirection2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                        <ComboBoxItem Content="由内到外" />
+                                                        <ComboBoxItem Content="由外到内" />
+                                                    </ComboBox>
+                                                </Grid>
+
+                                                <Grid Grid.Row="6" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="梯度方向2" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    <ComboBox Grid.Column="1" 
+                                                              SelectedIndex="{Binding TiduDirection2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                        <ComboBoxItem Content="由白到黑" />
+                                                        <ComboBoxItem Content="由黑到白" />
+                                                    </ComboBox>
+                                                </Grid>
+
+                                                <Grid Grid.Row="7" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="灰度值2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding GrayValue2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="8" Margin="3">
+                                                    <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="Blue"
+                                            Text="JP定位检测设置(实测小于规格OK)" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="9" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="捕捉圆心X2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            IsReadOnly="True"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding ActualX2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="10" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="捕捉圆心Y2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            IsReadOnly="True"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding ActualY2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="11" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="基准X2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding ReferenceX2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="12" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="基准Y2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding ReferenceY2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="13" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="基准实测2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            IsReadOnly="True"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding ReferenceActual2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="14" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="基准规格2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding ReferenceSpec2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="15" Margin="3">
+                                                    <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="Blue"
+                                            Text="视觉补偿设置(比例=丝杆/像素)" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="16" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" VerticalAlignment="Center"  Text="补偿模式" />
+                                                    <ComboBox Grid.Column="1"
+                                            SelectedIndex="{Binding BuchangMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                        <ComboBoxItem Content="补偿关" />
+                                                        <ComboBoxItem Content="补偿开" />
+                                                    </ComboBox>
+                                                </Grid>
+
+                                                <Grid Grid.Row="17" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="比例尺X" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding MeasuringScaleX, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="18" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="比例尺Y" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding MeasuringScaleY, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="19" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="补偿上限" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding BuchangSpec, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                            </Grid>
+                                        </Border>
+
+                                    </Grid>
+                                </ScrollViewer>
+                            </TabItem>
+
+                            <TabItem Header="规格1" IsEnabled="{Binding isEnabled,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                <ScrollViewer>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions >
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Grid.Column="0" Margin="3" BorderBrush="Black" BorderThickness="0.5">
+                                            <Grid ClipToBounds="True">
+
+                                                <Grid.RowDefinitions >
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0" Margin="3">
+                                                    <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="Blue"
+                                            Text="JP角度检测设置" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="1" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="内界限2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding MinRadiusAng2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="2" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="外界线2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding MaxRadiusAng2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="3" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="灰度值2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding GrayValueAng2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="4" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="标记点类型2" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    <ComboBox Grid.Column="1"
+                                                  SelectedIndex="{Binding MarkMode2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                                                        <ComboBoxItem Content="暗面" />
+                                                        <ComboBoxItem Content="亮面" />
+                                                    </ComboBox>
+                                                </Grid>
+
+                                                <Grid Grid.Row="5" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="实测轮廓数2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            IsReadOnly="True"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding Index2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="6" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="实测最大面积2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            IsReadOnly="True"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding MaxAreaAng2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="7" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                                    Grid.Column="0"
+                                                    VerticalAlignment="Center"
+                                                    Text="面积规格下限2" />
+                                                            <hc:NumericUpDown
+                                                    Grid.Column="1"
+                                                    Minimum="0"
+                                                    ValueFormat="#0.000"
+                                                    Value="{Binding SpecAreaAng2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="8" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                                    Grid.Column="0"
+                                                    VerticalAlignment="Center"
+                                                    Text="面积规格上限2" />
+                                                    <hc:NumericUpDown
+                                                    Grid.Column="1"
+                                                    Minimum="0"
+                                                    ValueFormat="#0.000"
+                                                    Value="{Binding SpecAreaAngSX2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="9" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="未找到报警2" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    <ComboBox Grid.Column="1"
+                                                  SelectedIndex="{Binding MarkErroMode2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                                                        <ComboBoxItem Content="是" />
+                                                        <ComboBoxItem Content="否" />
+                                                    </ComboBox>
+                                                </Grid>
+
+
+                                                <Grid Grid.Row="10" Margin="3">
+                                                    <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="Blue"
+                                            Text="正反检测(实测大/小于规格OK)" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="11" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="内界线B1" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding MinRadiusB1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="12" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="外界线B1" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding MaxRadiusB1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="13" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="灰度值B1" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding GrayValueB1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="14" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="实测值B1" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            IsReadOnly="True"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding ValueActualB1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="15" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="比较符号B1" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    <ComboBox Grid.Column="1"
+                                                  SelectedIndex="{Binding CompareB1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                                                        <ComboBoxItem Content="大于" />
+                                                        <ComboBoxItem Content="小于" />
+                                                    </ComboBox>
+                                                </Grid>
+
+                                                <Grid Grid.Row="16" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="检测规格B1" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding SpecValueB1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                            </Grid>
+                                        </Border>
+
+                                    </Grid>
+                                </ScrollViewer>
+                            </TabItem>
+
+                            <TabItem Header="规格2" IsEnabled="{Binding isEnabled,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                <ScrollViewer>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions >
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Grid.Column="0" Margin="3" BorderBrush="Black" BorderThickness="0.5">
+                                            <Grid ClipToBounds="True">
+
+                                                <Grid.RowDefinitions >
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0" Margin="3">
+                                                    <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="Blue"
+                                            Text="涂黑检测(实测大/小于规格OK)" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="1" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="内界线B2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding MinRadiusB2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="2" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="外界线B2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding MaxRadiusB2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="3" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="灰度值B2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding GrayValueB2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="4" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="实测值B2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            IsReadOnly="True"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding ValueActualB2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="5" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="比较符号B2" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    <ComboBox Grid.Column="1"
+                                                  SelectedIndex="{Binding CompareB2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                                                        <ComboBoxItem Content="大于" />
+                                                        <ComboBoxItem Content="小于" />
+                                                    </ComboBox>
+                                                </Grid>
+
+                                                <Grid Grid.Row="6" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="检测规格B2" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding SpecValueB2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                            </Grid>
+                                        </Border>
+
+                                    </Grid>
+                                </ScrollViewer>
+                            </TabItem>
+
+                            <TabItem Header="规格3" IsEnabled="{Binding isEnabled,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                <ScrollViewer>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions >
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Grid.Column="0" Margin="3" BorderBrush="Black" BorderThickness="0.5">
+                                            <Grid ClipToBounds="True">
+
+                                                <Grid.RowDefinitions >
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0" Margin="3">
+                                                    <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="Blue"
+                                            Text="部品检测设置(实测小于规格为OK)" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="1" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="内界线B3" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding MinRadiusB3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="2" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="外界线B3" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding MaxRadiusB3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="3" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="灰度值B3" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding GrayValueB3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="4" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="实测值B3" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            IsReadOnly="True"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding ValueActualB3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="5" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="比较符号B3" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    <ComboBox Grid.Column="1"
+                                                  SelectedIndex="{Binding CompareB3,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                                                        <ComboBoxItem Content="大于" />
+                                                        <ComboBoxItem Content="小于" />
+                                                    </ComboBox>
+                                                </Grid>
+
+                                                <Grid Grid.Row="6" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Text="检测规格B3" />
+                                                    <hc:NumericUpDown
+                                            Grid.Column="1"
+                                            Minimum="0"
+                                            ValueFormat="#0.000"
+                                            Value="{Binding SpecValueB3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                            </Grid>
+                                        </Border>
+
+                                    </Grid>
+                                </ScrollViewer>
+                            </TabItem>
+
+                            <TabItem Header="通信" IsEnabled="{Binding isEnabled,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                <ScrollViewer>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions >
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Grid.Column="0" Margin="3" BorderBrush="Black" BorderThickness="0.5">
+                                            <Grid ClipToBounds="True">
+                                                <Grid.RowDefinitions >
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                    <RowDefinition Height="1*" />
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0" Margin="3">
+                                                    <TextBlock Text="通信参数设置" 
+                                                   VerticalAlignment="Center"  
+                                                   HorizontalAlignment="Center" 
+                                                   Foreground="Blue"/>
+                                                </Grid>
+
+                                                <Grid Grid.Row="1" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="JP相机" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    <ComboBox Grid.Column="1"
+                                                  SelectedIndex="{Binding CamNum2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                  ItemsSource="{Binding Cameralist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                                    </ComboBox>
+                                                </Grid>
+
+                                                <Grid Grid.Row="2" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
+                                                    Grid.Column="0"
+                                                    VerticalAlignment="Center"
+                                                    Text="JP曝光" />
+                                                            <hc:NumericUpDown
+                                                    Grid.Column="1"
+                                                    Minimum="0"
+                                                    ValueFormat="#0.000"
+                                                    Value="{Binding ValueExposureTime2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="3" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="4*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" VerticalAlignment="Center"  Text="JP增益" />
+                                                    <hc:NumericUpDown Grid.Column="1"                                            
+                                                    Minimum="0"
+                                                    ValueFormat="#0.000"
+                                                    Value="{Binding ValueGain2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </Grid>
+
+                                                <Grid Grid.Row="4" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="本机IP" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    <hc:TextBox Grid.Column="1" 
+                                            Text="{Binding mySocket.IP_Adress,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                                </Grid>
+
+                                                <Grid Grid.Row="5" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="端口" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    <hc:TextBox Grid.Column="1"
+                                            Text="{Binding mySocket.nPort,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                                </Grid>
+
+                                                <Grid Grid.Row="6" Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3*"/>
+                                                        <ColumnDefinition Width="4*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="读取样本" Grid.Column="0" VerticalAlignment="Center"/>
+                                                    <hc:TextBox Grid.Column="1" 
+                                                    Text="{Binding ReadSample,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                                </Grid>
+
+                                            </Grid>
+                                        </Border>
+
+                                    </Grid>
+                                </ScrollViewer>
+                            </TabItem>
+
+                        </TabControl>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
