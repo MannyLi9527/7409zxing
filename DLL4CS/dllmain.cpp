@@ -75,7 +75,8 @@ string DecodeDataMatrixFromMat(const Mat& image)
 	auto result = ZXing::ReadBarcode(imageView, hints);
 
 	// 6. 返回解码结果
-	if (result.isValid()) {
+	if (result.isValid()) 
+	{
 		return result.text();
 	}
 
@@ -1030,100 +1031,104 @@ bool locationSM(BmpBuf &data, char** input_Parameter, float* output_Parameter_Fl
 #pragma region 本地参数		
 		Mat dst;
 		Mat src = Mat(data.h, data.w, CV_8UC1, data.data_Input);//相机
-		Mat mask = Mat::zeros(src.size(), src.type());
-		Mat temp = Mat::zeros(src.size(), src.type());
-		Mat srcblur;
-		string result = DecodeDataMatrixFromMat(src);
-		float ActualPianyiSMflag = true;
-		float ActualCDZDflag = true;
-		float ActualQuyu2flag = true;
-		float ActualQuyu3flag = true;
+		string result = DecodeDataMatrixFromMat(src);//二维码识别
+		dst = src;
+		stringstream str(result);
 
-		float SMResultflag = false;
-		float ActualX = 0;
-		float ActualY = 0;
-		Point2f center = Point2f(DefaultX, DefaultY);//捕捉圆预输入圆心
-		stringstream str;
+#pragma region 临时注释
+		//Mat mask = Mat::zeros(src.size(), src.type());
+		//Mat temp = Mat::zeros(src.size(), src.type());
+		//Mat srcblur;
+		//float ActualPianyiSMflag = true;
+		//float ActualCDZDflag = true;
+		//float ActualQuyu2flag = true;
+		//float ActualQuyu3flag = true;
+
+		//float SMResultflag = false;
+		//float ActualX = 0;
+		//float ActualY = 0;
+		//Point2f center = Point2f(DefaultX, DefaultY);//捕捉圆预输入圆心
+		//stringstream str;
 #pragma endregion
 
 #pragma region 图像预处理
 		
-		blur(src, srcblur, Size(3, 3));
-		threshold(srcblur, temp, GrayValue, 255, THRESH_BINARY);
+		/*blur(src, srcblur, Size(3, 3));
+		threshold(srcblur, temp, GrayValue, 255, THRESH_BINARY);*/
 		
 #pragma endregion
 
 #pragma region 输出图片选择
-		if (IsShow == 1)
-		{
-			cvtColor(temp, dst, COLOR_GRAY2RGB);
-		}
-		else
-		{
-			cvtColor(src, dst, COLOR_GRAY2RGB);
-		}
-		circle(dst, center, MaxRadius, Scalar(0, 0, 255), 2, 1);//捕捉圆外界限,线宽=2
-		circle(dst, center, MinRadius, Scalar(0, 0, 255), 2, 1);//捕捉圆内界限,线宽=2
+		//if (IsShow == 1)
+		//{
+		//	cvtColor(temp, dst, COLOR_GRAY2RGB);
+		//}
+		//else
+		//{
+		//	cvtColor(src, dst, COLOR_GRAY2RGB);
+		//}
+		//circle(dst, center, MaxRadius, Scalar(0, 0, 255), 2, 1);//捕捉圆外界限,线宽=2
+		//circle(dst, center, MinRadius, Scalar(0, 0, 255), 2, 1);//捕捉圆内界限,线宽=2
 #pragma endregion
 
 #pragma region 卡尺圆定位
-		cv::Vec3i vecTmp = { (int)center.x, (int)center.y, (int)(MaxRadius + MinRadius) / 2 };//输入预设的圆心、半径
-		int nV = (MaxRadius - MinRadius) / 2, nH = 5, nThreshold = GrayValue;//输入预设的扫描范围
-		std::vector<cv::Point> stOutPt;//定义一个容器用来装扫描到的点
+		//cv::Vec3i vecTmp = { (int)center.x, (int)center.y, (int)(MaxRadius + MinRadius) / 2 };//输入预设的圆心、半径
+		//int nV = (MaxRadius - MinRadius) / 2, nH = 5, nThreshold = GrayValue;//输入预设的扫描范围
+		//std::vector<cv::Point> stOutPt;//定义一个容器用来装扫描到的点
 
-		//由内到外
-		if (ScanDirection == 0)
-		{
-			if (TiduDirection == 0)
-			{
-				temp = 255 - temp;
-			}
-		}
-		else
-		{
-			if (TiduDirection == 1)//
-			{
-				temp = 255 - temp;
-			}
-		}
+		////由内到外
+		//if (ScanDirection == 0)
+		//{
+		//	if (TiduDirection == 0)
+		//	{
+		//		temp = 255 - temp;
+		//	}
+		//}
+		//else
+		//{
+		//	if (TiduDirection == 1)//
+		//	{
+		//		temp = 255 - temp;
+		//	}
+		//}
 
-		gen_Metrology_Model_circle(temp, vecTmp, nV, nH, nThreshold, stOutPt, ScanDirection);//调用函数查找圆上的点
-		for (size_t i = 0; i < stOutPt.size(); i++)
-		{
-			line(dst, stOutPt[i], stOutPt[i], Scalar(255, 255, 0), 2);//查找到的点画圆1，宽度=2
-		}
+		//gen_Metrology_Model_circle(temp, vecTmp, nV, nH, nThreshold, stOutPt, ScanDirection);//调用函数查找圆上的点
+		//for (size_t i = 0; i < stOutPt.size(); i++)
+		//{
+		//	line(dst, stOutPt[i], stOutPt[i], Scalar(255, 255, 0), 2);//查找到的点画圆1，宽度=2
+		//}
 
-		std::vector < cv::Point> inPoints; inPoints.clear();//新建一个容器装拟合后的点
-		circleInfo fitCircle;//定义一个拟合出来的圆的参数
+		//std::vector < cv::Point> inPoints; inPoints.clear();//新建一个容器装拟合后的点
+		//circleInfo fitCircle;//定义一个拟合出来的圆的参数
 
-		if (3 > stOutPt.size())
-		{
-			str << "有效点数不足，定位失败！" << endl;
-			goto OUTPUT;
-		}
+		//if (3 > stOutPt.size())
+		//{
+		//	str << "有效点数不足，定位失败！" << endl;
+		//	goto OUTPUT;
+		//}
 
-		ransc_fit_circle(src, stOutPt, 816, 1.5, 60, inPoints, fitCircle);//对查找到的圆上的点进行拟合
-		for (size_t i = 0; i < inPoints.size(); i++)
-		{
-			line(dst, inPoints[i], inPoints[i], Scalar(0, 255, 255), 2);//拟合后的点画圆2，宽度=2
-		}
+		//ransc_fit_circle(src, stOutPt, 816, 1.5, 60, inPoints, fitCircle);//对查找到的圆上的点进行拟合
+		//for (size_t i = 0; i < inPoints.size(); i++)
+		//{
+		//	line(dst, inPoints[i], inPoints[i], Scalar(0, 255, 255), 2);//拟合后的点画圆2，宽度=2
+		//}
 
-		if (3 > inPoints.size())
-		{
-			str << "拟合分数过低！定位失败！" << endl;
-			goto OUTPUT;
-		}
-		ActualX = fitCircle.A;//捕捉到的圆心坐标X
-		ActualY = fitCircle.B;//捕捉到的圆心坐标Y
+		//if (3 > inPoints.size())
+		//{
+		//	str << "拟合分数过低！定位失败！" << endl;
+		//	goto OUTPUT;
+		//}
+		//ActualX = fitCircle.A;//捕捉到的圆心坐标X
+		//ActualY = fitCircle.B;//捕捉到的圆心坐标Y
 
-		circle(dst, cv::Point2f(fitCircle.A, fitCircle.B), fitCircle.C, Scalar(255, 0, 0), 2);//捕捉到的圆，宽度=2
-		str << "圆心:(" << ActualX << "," << ActualY << ")" << endl;
-		output_Parameter_Float[1] = ActualX;
-		output_Parameter_Float[2] = ActualY;
+		//circle(dst, cv::Point2f(fitCircle.A, fitCircle.B), fitCircle.C, Scalar(255, 0, 0), 2);//捕捉到的圆，宽度=2
+		//str << "圆心:(" << ActualX << "," << ActualY << ")" << endl;
+		//output_Parameter_Float[1] = ActualX;
+		//output_Parameter_Float[2] = ActualY;
 
 #pragma region 检测区域
 
-		ActualPianyiSM = sqrt((ActualX - ReferenceX)*(ActualX - ReferenceX) + (ActualY - ReferenceY)*(ActualY - ReferenceY));
+		/*ActualPianyiSM = sqrt((ActualX - ReferenceX)*(ActualX - ReferenceX) + (ActualY - ReferenceY)*(ActualY - ReferenceY));
 		output_Parameter_Float[3] = ActualPianyiSM;
 		if (ActualPianyiSM > ReferenceSpec)
 		{
@@ -1176,13 +1181,13 @@ bool locationSM(BmpBuf &data, char** input_Parameter, float* output_Parameter_Fl
 				str << "区域3检测NG" << endl;
 				ActualQuyu3flag = false;
 			}
-		}
-		
+		}*/
+#pragma endregion
 #pragma endregion
 
 #pragma region 结果返回
 
-		if (ActualPianyiSMflag && ActualCDZDflag && ActualQuyu2flag && ActualQuyu3flag)
+		/*if (ActualPianyiSMflag && ActualCDZDflag && ActualQuyu2flag && ActualQuyu3flag)
 		{
 			SMResultflag = true;
 			output_Parameter_Float[0] = SMResultflag;
@@ -1191,7 +1196,16 @@ bool locationSM(BmpBuf &data, char** input_Parameter, float* output_Parameter_Fl
 		{
 			SMResultflag = false;
 			output_Parameter_Float[0] = SMResultflag;
-		}
+		}*/
+
+if (result.size() == 0)
+{
+	output_Parameter_Float[0] = false;
+}
+else if (result.size() == 33)
+{
+	output_Parameter_Float[0] = true;
+}
 
 #pragma endregion
 
@@ -1199,33 +1213,47 @@ bool locationSM(BmpBuf &data, char** input_Parameter, float* output_Parameter_Fl
 		OUTPUT:
 
 #pragma region 文字输入
-			  //字体大小
-			  int text_Size = (int)((data.w* data.h / 10000 - 30) * 0.078 + 50); 
-			  //位置
-			  Point text_Localtion01;
-			  text_Localtion01.x = text_Size / 3;
-			  text_Localtion01.y = text_Size / 3;
-			  Point text_Localtion02;
-			  text_Localtion02.x = text_Size / 3;
-			  text_Localtion02.y = data.h - text_Size * 4;
-			  Point text_Localtion03;
-			  text_Localtion03.x = text_Size / 3;
-			  text_Localtion03.y = data.h - text_Size * 3;
+			  ////字体大小
+			  //int text_Size = (int)((data.w* data.h / 10000 - 30) * 0.078 + 50); 
+			  ////位置
+			  //Point text_Localtion01;
+			  //text_Localtion01.x = text_Size / 3;
+			  //text_Localtion01.y = text_Size / 3;
+			  //Point text_Localtion02;
+			  //text_Localtion02.x = text_Size / 3;
+			  //text_Localtion02.y = data.h - text_Size * 4;
+			  //Point text_Localtion03;
+			  //text_Localtion03.x = text_Size / 3;
+			  //text_Localtion03.y = data.h - text_Size * 3;
 
-			  if (!SMResultflag)
-			  {
-				  putTextZH(dst, str.str().c_str(), text_Localtion01, Scalar(255, 0, 0), text_Size, "黑体", 0);//RGB
-				  output_Parameter_Float[0] = false;
-			  }
-			  else
-			  {
-				  putTextZH(dst, str.str().c_str(), text_Localtion01, Scalar(0, 255, 0), text_Size, "黑体", 0);
-			  }
+			  //if (!output_Parameter_Float[0])
+			  //{
+				 // putTextZH(dst, str.str().c_str(), text_Localtion01, Scalar(255, 0, 0), text_Size, "黑体", 0);//RGB
+				 // output_Parameter_Float[0] = false;
+			  //}
+			  //else
+			  //{
+				 // putTextZH(dst, str.str().c_str(), text_Localtion01, Scalar(0, 255, 0), text_Size, "黑体", 0);
+			  //}
+
+
+
 #pragma endregion
 
 #pragma region 图片返回
 			  Mat output;
 			  cvtColor(dst, output, CV_BGR2RGB);
+
+			  // 设置文本参数
+			  Point textOrg(0, 70);                  // 文字左下角坐标
+			  int fontFace = FONT_HERSHEY_SIMPLEX;    // 字体类型
+			  double fontScale = 1.9;                     // 字体大小
+			  Scalar color(0, 255, 0);               // 颜色（BGR格式，绿色）
+			  int thickness = 3;                          // 线条粗细
+			  putText(output, result, textOrg, fontFace, fontScale, color, thickness);
+
+
+
 			  int size = output.total() * output.elemSize();
 			  data.size = size;
 			  data.h = output.rows;
