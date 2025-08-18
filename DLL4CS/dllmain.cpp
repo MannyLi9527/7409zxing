@@ -30,9 +30,58 @@ struct BmpBuf
 #include <opencv.hpp>
 #include <opencv2/imgproc/types_c.h>
 #include "putText.h"
+#include <ReadBarcode.h>
+#include <BarcodeFormat.h>
+#include <ReaderOptions.h>
+#include <TextUtfEncoding.h>  // 确保路径正确
 #include<ctime> //系统时间获取头文件
 using namespace cv;
 using namespace std;
+
+
+string DecodeDataMatrixFromMat(const Mat& image) 
+{
+	// 1. 检查输入图像是否有效
+	if (image.empty()) {
+		return "";
+	}
+
+	// 2. 将 OpenCV Mat 转换为 ZXing 兼容的格式（灰度图像）
+	Mat grayMat;
+	if (image.channels() == 3) {
+		cvtColor(image, grayMat, cv::COLOR_BGR2GRAY);
+	}
+	else if (image.channels() == 1) {
+		grayMat = image;
+	}
+	else {
+		return ""; // 不支持的通道数
+	}
+
+	// 3. 创建 ZXing 的 ImageView 对象
+	ZXing::ImageView imageView{
+		grayMat.data,            // 图像数据指针
+		grayMat.cols,            // 宽度
+		grayMat.rows,            // 高度
+		ZXing::ImageFormat::Lum  // 灰度格式
+	};
+
+	// 4. 配置解码选项（仅识别 DataMatrix）
+	ZXing::ReaderOptions hints;
+	hints.setFormats({ ZXing::BarcodeFormat::DataMatrix });
+	hints.setTryHarder(true);
+
+	// 5. 调用 ZXing 解码
+	auto result = ZXing::ReadBarcode(imageView, hints);
+
+	// 6. 返回解码结果
+	if (result.isValid()) {
+		return result.text();
+	}
+
+	return ""; // 解码失败
+}
+
 
 //获取圆周像素算法
 float CircleTraverse(Mat mat1, Mat mat2,float CenterX, float CenterY, float MinRadius, float MaxRadius, float GrayValue)
@@ -984,7 +1033,7 @@ bool locationSM(BmpBuf &data, char** input_Parameter, float* output_Parameter_Fl
 		Mat mask = Mat::zeros(src.size(), src.type());
 		Mat temp = Mat::zeros(src.size(), src.type());
 		Mat srcblur;
-
+		string result = DecodeDataMatrixFromMat(src);
 		float ActualPianyiSMflag = true;
 		float ActualCDZDflag = true;
 		float ActualQuyu2flag = true;
