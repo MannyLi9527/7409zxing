@@ -72,7 +72,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\视觉案例\bin\Debug\dll</OutDir>
+    <OutDir>..\SVision\bin\Debug\dll</OutDir>
+    <IncludePath>F:\Opencv\4.5.1\opencv4.5.1\include;F:\Opencv\4.5.1\opencv4.5.1\include\opencv2;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\Opencv\4.5.1\opencv4.5.1\x86\vc15\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -99,15 +101,15 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;DLL4CS_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>D:\opencv4.5.1\include;D:\opencv4.5.1\include\opencv2;%(AdditionalIncludeDirectories);C:\Users\Administrator\Desktop\ZXing\zxing\cpp\core\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\Opencv\4.5.1\opencv4.5.1\include;F:\Opencv\4.5.1\opencv4.5.1\include\opencv2</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>D:\opencv4.5.1\x86\vc15\lib;%(AdditionalLibraryDirectories);E:\lm file\新视觉软件\sml1.0\7409视觉C#-海康v12\DLL4CS\src\zxing\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world451d.lib;%(AdditionalDependencies);ZXing.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>F:\Opencv\4.5.1\opencv4.5.1\x86\vc15\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_world451d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>

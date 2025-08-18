@@ -83,9 +83,9 @@
                 Grid.ColumnSpan="3"/>
 
             <!--工位1-->
-            <Grid x:Name="view01" Grid.Column="0" >
+            <!--<Grid x:Name="view01" Grid.Column="0" >
                 <local:MainViewCtrl />
-            </Grid>
+            </Grid>-->
 
             <!--工位2-->
             <Grid x:Name="view02" Grid.Column="1">
@@ -93,9 +93,9 @@
             </Grid>
 
             <!--工位2-->
-            <Grid x:Name="view03" Grid.Column="2">
+            <!--<Grid x:Name="view03" Grid.Column="2">
                 <local:MainViewCtrl />
-            </Grid>
+            </Grid>-->
 
         </Grid>
     </Grid>

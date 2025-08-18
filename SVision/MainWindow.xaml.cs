@@ -38,16 +38,16 @@ namespace Vision
                 inputTextBox.Text = Properties.Settings.Default.SavedText;//机种名输入程序,Properties Setting相应设置
 
                 //工位1
-                MainVM01 = new MainViewModel("./Para/01",1);
-                view01.DataContext = MainVM01;
+                //MainVM01 = new MainViewModel("./Para/01",1);
+                //view01.DataContext = MainVM01;
 
                 //工位2
                 MainVM02 = new SomaViewModel("./Para/02", 2);
                 view02.DataContext = MainVM02;
 
                 //工位3
-                MainVM03 = new MainViewModel("./Para/03", 3);
-                view03.DataContext = MainVM03;
+                //MainVM03 = new MainViewModel("./Para/03", 3);
+                //view03.DataContext = MainVM03;
 
 
 
