@@ -101,14 +101,14 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;DLL4CS_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\SVision\环境\opencv4.5.1\include;..\SVision\环境\opencv4.5.1\include\opencv2;E:\lm file\新视觉软件\sml1.0\ViewChange\7409\DLL4CS\ZXing\ZXing</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\SVision\环境\opencv4.5.1\include;..\SVision\环境\opencv4.5.1\include\opencv2;..\SVision\环境\ZXing\ZXing</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>..\SVision\环境\opencv4.5.1\x86\vc15\lib;E:\lm file\新视觉软件\sml1.0\ViewChange\7409\DLL4CS\ZXing\include</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\SVision\环境\opencv4.5.1\x86\vc15\lib;..\SVision\环境\ZXing\include</AdditionalLibraryDirectories>
       <AdditionalDependencies>opencv_world451d.lib;ZXing.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
     </Link>
