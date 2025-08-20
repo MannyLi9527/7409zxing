@@ -33,54 +33,55 @@ struct BmpBuf
 #include <ReadBarcode.h>
 #include <BarcodeFormat.h>
 #include <ReaderOptions.h>
-#include <TextUtfEncoding.h>  // 确保路径正确
-#include<ctime> //系统时间获取头文件
+#include <TextUtfEncoding.h> 
+#include <ctime> 
 using namespace cv;
 using namespace std;
 
 
 string DecodeDataMatrixFromMat(const Mat& image) 
 {
-	// 1. 检查输入图像是否有效
 	if (image.empty()) {
 		return "";
 	}
 
-	// 2. 将 OpenCV Mat 转换为 ZXing 兼容的格式（灰度图像）
 	Mat grayMat;
-	if (image.channels() == 3) {
+	if (image.channels() == 3) 
+	{
 		cvtColor(image, grayMat, cv::COLOR_BGR2GRAY);
 	}
-	else if (image.channels() == 1) {
+	else if (image.channels() == 1) 
+	{
 		grayMat = image;
 	}
-	else {
-		return ""; // 不支持的通道数
+	else 
+	{
+		return ""; 
 	}
 
-	// 3. 创建 ZXing 的 ImageView 对象
+	
 	ZXing::ImageView imageView{
-		grayMat.data,            // 图像数据指针
-		grayMat.cols,            // 宽度
-		grayMat.rows,            // 高度
-		ZXing::ImageFormat::Lum  // 灰度格式
+		grayMat.data,            
+		grayMat.cols,            
+		grayMat.rows,            
+		ZXing::ImageFormat::Lum  
 	};
 
-	// 4. 配置解码选项（仅识别 DataMatrix）
+	
 	ZXing::ReaderOptions hints;
 	hints.setFormats({ ZXing::BarcodeFormat::DataMatrix });
 	hints.setTryHarder(true);
 
-	// 5. 调用 ZXing 解码
+	
 	auto result = ZXing::ReadBarcode(imageView, hints);
 
-	// 6. 返回解码结果
+	
 	if (result.isValid()) 
 	{
 		return result.text();
 	}
 
-	return ""; // 解码失败
+	return ""; 
 }
 
 
@@ -989,7 +990,7 @@ bool locationSM(BmpBuf &data, char** input_Parameter, float* output_Parameter_Fl
 	try
 	{
 #pragma region 参数转换
-		int IsShow = atoi(input_Parameter[0]);
+		/*int IsShow = atoi(input_Parameter[0]);
 		int ScanDirection = atoi(input_Parameter[1]);
 
 		float DefaultX = atof(input_Parameter[2]);
@@ -1024,17 +1025,15 @@ bool locationSM(BmpBuf &data, char** input_Parameter, float* output_Parameter_Fl
 		float ActualPianyiSM = 0;
 		float ActualCDZD = 0;
 		float ActualQuyu2 = 0;
-		float ActualQuyu3 = 0;
+		float ActualQuyu3 = 0;*/
 
 #pragma endregion
 
 #pragma region 本地参数		
-		Mat dst;
-		Mat src = Mat(data.h, data.w, CV_8UC1, data.data_Input);//相机
-		string result = DecodeDataMatrixFromMat(src);//二维码识别
-		dst = src;
-		stringstream str(result);
-
+		//Mat dst;
+		Mat dst = Mat(data.h, data.w, CV_8UC1, data.data_Input);//相机
+		string result = DecodeDataMatrixFromMat(dst);//二维码识别
+		
 #pragma region 临时注释
 		//Mat mask = Mat::zeros(src.size(), src.type());
 		//Mat temp = Mat::zeros(src.size(), src.type());
@@ -1187,25 +1186,15 @@ bool locationSM(BmpBuf &data, char** input_Parameter, float* output_Parameter_Fl
 
 #pragma region 结果返回
 
-		/*if (ActualPianyiSMflag && ActualCDZDflag && ActualQuyu2flag && ActualQuyu3flag)
+	
+		if (result.size() == 0)
 		{
-			SMResultflag = true;
-			output_Parameter_Float[0] = SMResultflag;
+			output_Parameter_Float[0] = false;
 		}
-		else
+		else if (result.size() == 33)
 		{
-			SMResultflag = false;
-			output_Parameter_Float[0] = SMResultflag;
-		}*/
-
-if (result.size() == 0)
-{
-	output_Parameter_Float[0] = false;
-}
-else if (result.size() == 33)
-{
-	output_Parameter_Float[0] = true;
-}
+			output_Parameter_Float[0] = true;
+		}
 
 #pragma endregion
 
@@ -1245,11 +1234,11 @@ else if (result.size() == 33)
 			  cvtColor(dst, output, CV_BGR2RGB);
 
 			  // 设置文本参数
-			  Point textOrg(0, 70);                  // 文字左下角坐标
-			  int fontFace = FONT_HERSHEY_SIMPLEX;    // 字体类型
-			  double fontScale = 1.9;                     // 字体大小
-			  Scalar color(0, 255, 0);               // 颜色（BGR格式，绿色）
-			  int thickness = 3;                          // 线条粗细
+			  Point textOrg(0, 70);                  
+			  int fontFace = FONT_HERSHEY_SIMPLEX;   
+			  double fontScale = 1.9;                
+			  Scalar color(0, 255, 0);               
+			  int thickness = 3;                     
 			  putText(output, result, textOrg, fontFace, fontScale, color, thickness);
 
 
